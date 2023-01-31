@@ -1,5 +1,5 @@
 const gameBoard = (function () {
-  const board = ["x", "x", "x", "x", "x", "x", "x", "x", "x"];
+  let board = ["x", "x", "x", "x", "x", "x", "x", "x", "x"];
   function drawBoard() {
     const bod = document.querySelector(".board");
     for (let i = 0; i < 9; i++) {
@@ -9,23 +9,27 @@ const gameBoard = (function () {
       spot.textContent = board[i];
     }
   }
+  function update(spots) {
+    for (var i = 0; i < spots.length; i++) {
+      board[i] = spots[i].textContent;
+    }
+  }
   return {
     board,
     drawBoard: drawBoard,
+    update: update,
   };
 })();
 
 const player = (mark) => {
   const win = () => true;
   const lose = () => true;
-  const play = () => {
-    const spots = document.querySelectorAll(".spot");
-    for (var i = 0; i < spots.length; i++) {
+  const play = (spots) => {
+    for (var i = 0; i < gameBoard.board.length; i++) {
       spots[i].addEventListener("click", (e) => {
         e.target.textContent = mark;
+        gameBoard.update(spots);
       });
-
-      //spots[i] = gameBoard.board[i];
     }
   };
   return {
@@ -36,5 +40,6 @@ const player1 = player("O");
 
 const controlFlow = (function () {
   gameBoard.drawBoard();
-  player1.play();
+  const spots = document.querySelectorAll(".spot");
+  player1.play(spots);
 })();
