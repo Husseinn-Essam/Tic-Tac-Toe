@@ -34,11 +34,22 @@ const player = (mark) => {
 };
 
 const controlFlow = (function () {
+  function win(mark) {
+    let win = false;
+
+    if (win == true) {
+      if (mark == "O") {
+        console.log("Player 1 wins");
+      } else if (mark == "X") {
+        console.log("Player 2 wins");
+      }
+    }
+  }
+
   function game() {
     gameBoard.drawBoard();
-    let currentPlayer;
+    let currentPlayer = 1;
     const spots = document.querySelectorAll(".spot");
-    currentPlayer = 1;
     const player1 = player("O");
     const player2 = player("X");
     for (var i = 0; i < 9; i++) {
@@ -48,6 +59,7 @@ const controlFlow = (function () {
           player1.play(e.target, player1.mark);
           gameBoard.update(spots);
           currentPlayer = 2;
+          win(player1.mark);
         } else {
           console.log(player2.mark);
           player2.play(e.target, player2.mark);
