@@ -32,10 +32,9 @@ const player = (mark) => {
   //     });
   //   }
   // };
-  const play = (spot, mark, spots) => {
+  const play = (spot, mark) => {
     if (spot.textContent == "") {
       spot.textContent = mark;
-      gameBoard.update(spots);
     }
   };
   return {
@@ -55,11 +54,13 @@ const controlFlow = (function () {
     spots[i].addEventListener("click", (e) => {
       if (currentPlayer == 1) {
         console.log(player1.mark);
-        player1.play(e.target, player1.mark, spots);
+        player1.play(e.target, player1.mark);
+        gameBoard.update(spots);
         currentPlayer = 2;
       } else {
         console.log(player2.mark);
-        player2.play(e.target, player2.mark, spots);
+        player2.play(e.target, player2.mark);
+        gameBoard.update(spots);
         currentPlayer = 1;
       }
     });
