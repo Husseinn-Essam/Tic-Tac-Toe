@@ -1,21 +1,12 @@
 const gameBoard = (function () {
-  let board = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-  ];
+  let board = ["", "", "", "", "", "", "", "", ""];
   function drawBoard() {
     const bod = document.querySelector(".board");
-    for (let i = 0; i < board.length; i++) {
-      let row = board[i];
-      for(var j=0;j<row.length;j++){
-        const spot = document.createElement("div");
-        spot.classList.add("spot");
-        bod.appendChild(spot);
-        spot.textContent = row[j];
-      
-      }
-       
+    for (let i = 0; i < 9; i++) {
+      const spot = document.createElement("div");
+      spot.classList.add("spot");
+      bod.appendChild(spot);
+      spot.textContent = board[i];
     }
   }
   function update(spots) {
@@ -43,18 +34,41 @@ const player = (mark) => {
 };
 
 const controlFlow = (function () {
-  function win(mark) {
-    let win = false;
-
-    if (win == true) {
-      if (mark == "O") {
-        console.log("Player 1 wins");
-      } else if (mark == "X") {
-        console.log("Player 2 wins");
+  //all win conditions
+  const winCond=[[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	[0, 4, 8],
+	[2, 4, 6],];
+  //array for player with O
+  let inxs=[];
+  //check if two arrays are equal
+  function arrayEquals(a, b) {
+    return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index]);
+}
+// win condition
+  function win() {
+    //let win = false;
+    for(var i=0;i<9;i++){
+      
+        if(gameBoard.board[i]=="O" && !(inxs.includes(i))){
+          inxs.push(i);
+          for(var j =0;j<winCond.length;j++){
+            if(arrayEquals(inxs,winCond[j])){
+              console.log("Winner found!");
+            }
+          }
+        }
       }
     }
-  }
-
+  
+//game flow
   function game() {
     gameBoard.drawBoard();
     let currentPlayer = 1;
@@ -68,7 +82,7 @@ const controlFlow = (function () {
           player1.play(e.target, player1.mark);
           gameBoard.update(spots);
           currentPlayer = 2;
-          win(player1.mark);
+          win();
         } else {
           console.log(player2.mark);
           player2.play(e.target, player2.mark);
