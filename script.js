@@ -22,16 +22,6 @@ const gameBoard = (function () {
 })();
 
 const player = (mark) => {
-  // const play = (spots, mark) => {
-  //   for (var i = 0; i < 9; i++) {
-  //     spots[i].addEventListener("click", (e) => {
-  //       if (e.target.textContent == "") {
-  //         e.target.textContent = mark;
-  //         gameBoard.update(spots);
-  //       }
-  //     });
-  //   }
-  // };
   const play = (spot, mark) => {
     if (spot.textContent == "") {
       spot.textContent = mark;
@@ -44,25 +34,32 @@ const player = (mark) => {
 };
 
 const controlFlow = (function () {
-  gameBoard.drawBoard();
-  let currentPlayer;
-  const spots = document.querySelectorAll(".spot");
-  currentPlayer = 1;
-  const player1 = player("O");
-  const player2 = player("X");
-  for (var i = 0; i < 9; i++) {
-    spots[i].addEventListener("click", (e) => {
-      if (currentPlayer == 1) {
-        console.log(player1.mark);
-        player1.play(e.target, player1.mark);
-        gameBoard.update(spots);
-        currentPlayer = 2;
-      } else {
-        console.log(player2.mark);
-        player2.play(e.target, player2.mark);
-        gameBoard.update(spots);
-        currentPlayer = 1;
-      }
-    });
+  function game() {
+    gameBoard.drawBoard();
+    let currentPlayer;
+    const spots = document.querySelectorAll(".spot");
+    currentPlayer = 1;
+    const player1 = player("O");
+    const player2 = player("X");
+    for (var i = 0; i < 9; i++) {
+      spots[i].addEventListener("click", (e) => {
+        if (currentPlayer == 1) {
+          console.log(player1.mark);
+          player1.play(e.target, player1.mark);
+          gameBoard.update(spots);
+          currentPlayer = 2;
+        } else {
+          console.log(player2.mark);
+          player2.play(e.target, player2.mark);
+          gameBoard.update(spots);
+          currentPlayer = 1;
+        }
+      });
+    }
   }
+  return {
+    game: game,
+  };
 })();
+
+controlFlow.game();
