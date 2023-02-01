@@ -22,14 +22,20 @@ const gameBoard = (function () {
 })();
 
 const player = (mark) => {
-  const play = (spots, mark) => {
-    for (var i = 0; i < 9; i++) {
-      spots[i].addEventListener("click", (e) => {
-        if (e.target.textContent == "") {
-          e.target.textContent = mark;
-          gameBoard.update(spots);
-        }
-      });
+  // const play = (spots, mark) => {
+  //   for (var i = 0; i < 9; i++) {
+  //     spots[i].addEventListener("click", (e) => {
+  //       if (e.target.textContent == "") {
+  //         e.target.textContent = mark;
+  //         gameBoard.update(spots);
+  //       }
+  //     });
+  //   }
+  // };
+  const play = (spot, mark, spots) => {
+    if (spot.textContent == "") {
+      spot.textContent = mark;
+      gameBoard.update(spots);
     }
   };
   return {
@@ -46,14 +52,14 @@ const controlFlow = (function () {
   const player1 = player("O");
   const player2 = player("X");
   for (var i = 0; i < 9; i++) {
-    spots[i].addEventListener("click", () => {
+    spots[i].addEventListener("click", (e) => {
       if (currentPlayer == 1) {
         console.log(player1.mark);
-        //player1.play(spots, player1.mark);
+        player1.play(e.target, player1.mark, spots);
         currentPlayer = 2;
       } else {
         console.log(player2.mark);
-        //player2.play(spots, player2.mark);
+        player2.play(e.target, player2.mark, spots);
         currentPlayer = 1;
       }
     });
