@@ -1,5 +1,5 @@
 const gameBoard = (function () {
-  let board = ["x", "x", "x", "x", "x", "x", "x", "x", "x"];
+  let board = ["", "", "", "", "", "", "", "", ""];
   function drawBoard() {
     const bod = document.querySelector(".board");
     for (let i = 0; i < 9; i++) {
@@ -22,24 +22,40 @@ const gameBoard = (function () {
 })();
 
 const player = (mark) => {
-  const win = () => true;
-  const lose = () => true;
-  const play = (spots) => {
-    for (var i = 0; i < gameBoard.board.length; i++) {
+  const play = (spots, mark) => {
+    for (var i = 0; i < 9; i++) {
       spots[i].addEventListener("click", (e) => {
-        e.target.textContent = mark;
-        gameBoard.update(spots);
+        if (e.target.textContent == "") {
+          e.target.textContent = mark;
+          gameBoard.update(spots);
+        }
       });
     }
   };
   return {
+    mark,
     play: play,
   };
 };
-const player1 = player("O");
 
 const controlFlow = (function () {
   gameBoard.drawBoard();
+  let currentPlayer;
   const spots = document.querySelectorAll(".spot");
-  player1.play(spots);
+  currentPlayer = 1;
+  const player1 = player("O");
+  const player2 = player("X");
+  for (var i = 0; i < 9; i++) {
+    spots[i].addEventListener("click", () => {
+      if (currentPlayer == 1) {
+        console.log(player1.mark);
+        //player1.play(spots, player1.mark);
+        currentPlayer = 2;
+      } else {
+        console.log(player2.mark);
+        //player2.play(spots, player2.mark);
+        currentPlayer = 1;
+      }
+    });
+  }
 })();
