@@ -1,12 +1,21 @@
 const gameBoard = (function () {
-  let board = ["", "", "", "", "", "", "", "", ""];
+  let board = [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ];
   function drawBoard() {
     const bod = document.querySelector(".board");
-    for (let i = 0; i < 9; i++) {
-      const spot = document.createElement("div");
-      spot.classList.add("spot");
-      bod.appendChild(spot);
-      spot.textContent = board[i];
+    for (let i = 0; i < board.length; i++) {
+      let row = board[i];
+      for(var j=0;j<row.length;j++){
+        const spot = document.createElement("div");
+        spot.classList.add("spot");
+        bod.appendChild(spot);
+        spot.textContent = row[j];
+      
+      }
+       
     }
   }
   function update(spots) {
