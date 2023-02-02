@@ -47,7 +47,7 @@ const controlFlow = (function () {
   const startGame = document.querySelector(".start");  
   let endGame=false;
   let mode= "ai";
-  let bestMove;
+  
 // win condition
   function win(mark) {
       let win = false;
@@ -67,18 +67,39 @@ const controlFlow = (function () {
       }
       if(win ==true){
         if(mark=="O"){
-          banner.textContent="Player 1 Wins!";
+          banner.textContent="Player O Wins!";
           endGame=true;
         }
         else{
-          banner.textContent="Player 2 Wins!";
+          banner.textContent="Player X Wins!";
           endGame=true;
         }
       }
     }
-    function minimax(){
-      return 1;
+    function AImode(spots,mode,currentPlayer){
+      if(mode=="ai"){
+          if(endGame==false){
+            let empty=[];
+              for(var j=0 ; j<9;j++){
+                if (spots[j].textContent=="" && gameBoard.board[j]==""){
+                  empty.push(j)
+                }
+              }
+              let random=Math.floor(Math.random()*empty.length);
+              while(spots[empty[random]].textContent!==""){ 
+                 random=Math.floor(Math.random()*empty.length);
+                
+              }
+              spots[empty[random]].textContent="X";
+              gameBoard.update(spots);
+              win("X");
+              currentPlayer=1;
+          }   
+          
+            
+      }
     }
+
     // restarting the game
   function gameOver(){
     startGame.addEventListener('click',()=>{
@@ -103,37 +124,19 @@ const controlFlow = (function () {
             player1.play(e.target, player1.mark);
             gameBoard.update(spots);
             win(player1.mark);
-            currentPlayer = 2;
-            
+            //currentPlayer = 2;
+            AImode(spots,mode,currentPlayer)
           } else {
             if(mode=="multi"){
               player2.play(e.target, player2.mark);
               gameBoard.update(spots);
               win(player2.mark);
               currentPlayer = 1;
-            }else{
-              let bestScore = -Infinity;
-              
-              for(var i=0 ; i<9;i++){
-                if(spots[i].textContent==""){
-                  gameBoard.board[i]="X";
-                  let score = minimax();
-                  gameBoard.board[i]="";
-                  
-                  if(score > bestScore ){
-                    bestScore=score;
-                    bestMove =i;
-                  }
-                }
-              }
-              spots[bestMove].textContent="X";
-              gameBoard.update(spots)
-              currentPlayer=1;
             }
-           
           }
         }
       });
+     
     }
   }
   return {
