@@ -46,7 +46,8 @@ const controlFlow = (function () {
   const banner= document.querySelector(".banner");
   const startGame = document.querySelector(".start");  
   let endGame=false;
-  
+  let mode= "ai";
+  let bestMove;
 // win condition
   function win(mark) {
       let win = false;
@@ -59,6 +60,10 @@ const controlFlow = (function () {
           win=true;
           break;
         }
+        else if(!(gameBoard.board.includes(""))&& win==false){
+          banner.textContent="Draw!";
+          endGame=true;
+        }
       }
       if(win ==true){
         if(mark=="O"){
@@ -70,6 +75,9 @@ const controlFlow = (function () {
           endGame=true;
         }
       }
+    }
+    function minimax(){
+      return 1;
     }
     // restarting the game
   function gameOver(){
@@ -98,10 +106,31 @@ const controlFlow = (function () {
             currentPlayer = 2;
             
           } else {
-            player2.play(e.target, player2.mark);
-            gameBoard.update(spots);
-            win(player2.mark);
-            currentPlayer = 1;
+            if(mode=="multi"){
+              player2.play(e.target, player2.mark);
+              gameBoard.update(spots);
+              win(player2.mark);
+              currentPlayer = 1;
+            }else{
+              let bestScore = -Infinity;
+              
+              for(var i=0 ; i<9;i++){
+                if(spots[i].textContent==""){
+                  gameBoard.board[i]="X";
+                  let score = minimax();
+                  gameBoard.board[i]="";
+                  
+                  if(score > bestScore ){
+                    bestScore=score;
+                    bestMove =i;
+                  }
+                }
+              }
+              spots[bestMove].textContent="X";
+              gameBoard.update(spots)
+              currentPlayer=1;
+            }
+           
           }
         }
       });
