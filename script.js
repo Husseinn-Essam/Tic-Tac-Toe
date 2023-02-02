@@ -46,8 +46,30 @@ const controlFlow = (function () {
   const banner= document.querySelector(".banner");
   const startGame = document.querySelector(".start");  
   let endGame=false;
-  let mode= "ai";
-  
+  const twoplay = document.querySelector(".twoBtn");
+  const onePlay = document.querySelector(".oneBtn")
+  let mode="multi";
+  let currentPlayer = 1;
+  twoplay.addEventListener('click',()=>{
+    mode="multi";
+     currentPlayer = 1;
+     for(var i = 0 ;i <9;i++){
+      gameBoard.board[i]="";
+      document.querySelectorAll(".spot")[i].textContent="";
+    }
+    banner.textContent="BATTLE";
+    endGame=false;
+  })
+  onePlay.addEventListener('click',()=>{
+    mode="ai";
+     currentPlayer = 1;
+     for(var i = 0 ;i <9;i++){
+      gameBoard.board[i]="";
+      document.querySelectorAll(".spot")[i].textContent="";
+    }
+    banner.textContent="BATTLE";
+    endGame=false;
+  })
 // win condition
   function win(mark) {
       let win = false;
@@ -76,7 +98,7 @@ const controlFlow = (function () {
         }
       }
     }
-    function AImode(spots,mode,currentPlayer){
+    function AImode(spots,mode){
       if(mode=="ai"){
           if(endGame==false){
             let empty=[];
@@ -93,7 +115,7 @@ const controlFlow = (function () {
               spots[empty[random]].textContent="X";
               gameBoard.update(spots);
               win("X");
-              currentPlayer=1;
+              
           }   
           
             
@@ -113,21 +135,21 @@ const controlFlow = (function () {
   }
 // game flow
   function game() {
-    let currentPlayer = 1;
+    
     const spots = document.querySelectorAll(".spot");
     const player1 = player("O");
     const player2 = player("X");
     for (var i = 0; i < 9; i++) {
       spots[i].addEventListener("click", (e) => {
         if (endGame==false){
-          if (currentPlayer == 1) {
+          if (currentPlayer == 1 && e.target.textContent=="") {
             player1.play(e.target, player1.mark);
             gameBoard.update(spots);
             win(player1.mark);
-            //currentPlayer = 2;
-            AImode(spots,mode,currentPlayer)
-          } else {
-            if(mode=="multi"){
+            currentPlayer = mode == "multi"? 2:1;
+            AImode(spots,mode)
+          } else if(currentPlayer==2 && mode == "multi" && e.target.textContent=="") {
+             
               player2.play(e.target, player2.mark);
               gameBoard.update(spots);
               win(player2.mark);
@@ -135,7 +157,7 @@ const controlFlow = (function () {
             }
           }
         }
-      });
+      );
      
     }
   }
